@@ -41,16 +41,13 @@ public class CrudResponseAdvice implements ResponseBodyAdvice<Object> {
 
         String name = returnType.getMethod().getName();
 
-        HttpStatus httpStatus = HttpStatus.OK;
-
         if (name.equals("delete")) {
-            httpStatus = HttpStatus.NO_CONTENT;
+            return RestResponseBuilder.ok().withHttpStatus(HttpStatus.NO_CONTENT).withResult(body).getResponse();
         } else if (name.equals("create")) {
-            httpStatus = HttpStatus.CREATED;
+            return RestResponseBuilder.ok().withHttpStatus(HttpStatus.CREATED).withResult(body).getResponse();
+        } else {
+            return RestResponseBuilder.ok().withHttpStatus(HttpStatus.OK).withResult(body).getResponse();
         }
-
-        response.setStatusCode(httpStatus);
-        return RestResponseBuilder.ok().withHttpStatus(httpStatus).withResult(body).getResponse();
 
     }
 

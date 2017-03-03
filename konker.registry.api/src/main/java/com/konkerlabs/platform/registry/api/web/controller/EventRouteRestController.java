@@ -10,7 +10,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.konkerlabs.platform.registry.api.exceptions.BadServiceResponseException;
 import com.konkerlabs.platform.registry.api.model.EventRouteVO;
-import com.konkerlabs.platform.registry.api.model.RestResponse;
 import com.konkerlabs.platform.registry.api.model.RouteActorType;
 import com.konkerlabs.platform.registry.api.model.RouteActorVO;
 import com.konkerlabs.platform.registry.business.model.Device;
@@ -34,9 +32,6 @@ import com.konkerlabs.platform.registry.business.model.User;
 import com.konkerlabs.platform.registry.business.services.api.DeviceRegisterService;
 import com.konkerlabs.platform.registry.business.services.api.EventRouteService;
 import com.konkerlabs.platform.registry.business.services.api.EventRouteService.Validations;
-
-import io.swagger.annotations.ApiOperation;
-
 import com.konkerlabs.platform.registry.business.services.api.ServiceResponse;
 import com.konkerlabs.platform.registry.business.services.api.TransformationService;
 
@@ -60,10 +55,6 @@ public class EventRouteRestController implements InitializingBean {
     private Set<String> validationsCode = new HashSet<>();
 
     @GetMapping(path = "/")
-    @PreAuthorize("hasAuthority('LIST_ROUTES')")
-    @ApiOperation(
-            value = "List all routes by organization",
-            response = EventRouteVO.class)
     public List<EventRouteVO> list() throws BadServiceResponseException {
 
         Tenant tenant = user.getTenant();
@@ -83,11 +74,6 @@ public class EventRouteRestController implements InitializingBean {
     }
 
     @GetMapping(path = "/{routeGuid}")
-    @PreAuthorize("hasAuthority('SHOW_DEVICE_ROUTE')")
-    @ApiOperation(
-            value = "Get a route by guid",
-            response = RestResponse.class
-    )
     public EventRouteVO read(@PathVariable("routeGuid") String routeGuid) throws BadServiceResponseException {
 
         Tenant tenant = user.getTenant();
@@ -103,8 +89,6 @@ public class EventRouteRestController implements InitializingBean {
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('CREATE_DEVICE_ROUTE')")
-    @ApiOperation(value = "Create a route")
     public EventRouteVO create(@RequestBody EventRouteVO routeForm) throws BadServiceResponseException {
 
         Tenant tenant = user.getTenant();
@@ -174,8 +158,6 @@ public class EventRouteRestController implements InitializingBean {
 
 
     @PutMapping(path = "/{routeGuid}")
-    @PreAuthorize("hasAuthority('EDIT_DEVICE_ROUTE')")
-    @ApiOperation(value = "Update a route")
     public void update(@PathVariable("routeGuid") String routeGuid, @RequestBody EventRouteVO routeForm) throws BadServiceResponseException {
 
         Tenant tenant = user.getTenant();
@@ -211,8 +193,6 @@ public class EventRouteRestController implements InitializingBean {
     }
 
     @DeleteMapping(path = "/{routeGuid}")
-    @PreAuthorize("hasAuthority('REMOVE_DEVICE_ROUTE')")
-    @ApiOperation(value = "Delete a route")
     public void delete(@PathVariable("routeGuid") String routeGuid) throws BadServiceResponseException {
 
         Tenant tenant = user.getTenant();
